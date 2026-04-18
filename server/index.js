@@ -22,6 +22,9 @@ import helmet from "helmet";
 import authRoutes from "./routes/auth.js";
 import reviewRoutes from "./routes/reviews.js";
 import { initDb } from "./db/database.js";
+await initDb().catch(err => {
+  console.error("❌ Database initialization failed:", err);
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -62,7 +65,8 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-initDb().then(() => {
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log("");
     console.log("╔══════════════════════════════════════╗");
@@ -74,7 +78,6 @@ initDb().then(() => {
     console.log("╚══════════════════════════════════════╝");
     console.log("");
   });
-}).catch((err) => {
-  console.error("❌ Failed to start server:", err);
-  process.exit(1);
-});
+}
+
+export default app;

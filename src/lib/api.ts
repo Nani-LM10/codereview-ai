@@ -1,6 +1,8 @@
 import type { Review } from "@/types";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.PROD 
+  ? "/api" 
+  : (import.meta.env.VITE_API_URL || "http://localhost:5000/api");
 
 const TOKEN_KEY = "codelensai-token";
 

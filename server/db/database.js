@@ -7,7 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);  // server/db/
 
 // Store DB at project root /data/codelensai.db
-const DB_PATH = process.env.DB_PATH || join(__dirname, "../../data/codelensai.db");
+// On Vercel, we must use /tmp since the filesystem is read-only
+const isVercel = process.env.VERCEL === "1";
+const DB_PATH = process.env.DB_PATH || (isVercel 
+  ? "/tmp/codelensai.db" 
+  : join(__dirname, "../../data/codelensai.db"));
 
 export let db;
 
